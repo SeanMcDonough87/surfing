@@ -239,7 +239,7 @@ event movie (t += 0.01; t <= 5)
 	width = 1024, height = 768);
 
   clear();
-  // draw_vof ("tangaroa");
+  draw_vof ("tangaroa");
   scalar Z[];
   Z[back] = dirichlet (z);
   foreach()
@@ -264,7 +264,7 @@ event image (t = 0)
 	width = 1024, height = 768);
 
   clear();
-  // draw_vof ("tangaroa");
+  draw_vof ("tangaroa");
   scalar Z[];
   Z[back] = dirichlet (z);
   foreach()
