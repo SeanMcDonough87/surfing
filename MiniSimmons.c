@@ -283,6 +283,21 @@ event snapshot (i += 100)
   lambda2 (u, l2);
   dump (file = name);
 }
+// Hoping the section below will export useable data from NS solver. 
+event logfile (t+= 0.1; i <== 10000) {
+  double du = change (u.x, un);
+  if ( i > 0 && du <1e-5)
+  return 1; /* stop*/
+  fprintf(stderr, "%f %d %g\n", t ,i, du );
+}
+event profiles ( t= end)
+  {
+    FILE *fp = fopen("uxProf", "w");
+    for (double y =-0.5; y<= 0.5; y+=0.01)
+      fprintif(fp,"%f %d %g\n",y, interpolate(u.x, 0, y) );
+      fprintf(fp,"\n");
+      fclose (fp);
+  }
 #endif
 
 /**
