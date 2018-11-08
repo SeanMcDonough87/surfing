@@ -30,7 +30,7 @@ On supercomputers we need to control the maximum runtime and we check
 performances. */
 
 #include "maxruntime.h"
-#include "navier-stokes/perfs.h"
+// #include "navier-stokes/perfs.h"
 
 /**
 ## Importing the geometry
@@ -237,6 +237,7 @@ event movie (t += 0.01; t <= 5)
 	quat = {0.515965,0.140691,0.245247,0.808605},
 	tx = -0.07438, ty = -0.0612925,
 	width = 1024, height = 768);
+  printf("I am starting movie generation...\n");
 
   clear();
   draw_vof ("tangaroa");
@@ -247,6 +248,7 @@ event movie (t += 0.01; t <= 5)
   boundary ({Z});
   draw_vof ("f", color = "Z", min = -1.0, max = 1.0, linear = true);
   save ("movie.mp4");
+  printf("I saved movie.mp4...\n");
 
   draw_vof ("tangaroa", fc = {0.5,0.5,0.5});
   draw_vof ("f", color = "Z", min = -0.1, max = 0.1, linear = true);
@@ -254,6 +256,7 @@ event movie (t += 0.01; t <= 5)
   lambda2 (u, l2);
   isosurface ("l2", -100);
   save ("l2.mp4");
+  printf("I saved l2.mp4...\n");
 }
 
 event image (t = 0)
@@ -284,16 +287,44 @@ event snapshot (i += 100)
 }
 // Hoping the section below will export useable data from NS solver.
 scalar un[];
-event logfile (t+= 0.1; i <= 10000) {
+event logfile (t+= 0.01) {
   double du = change (u.x, un);
-  if ( i > 0 && du <1e-5)
-  return 1; /* stop*/
+  if ( i > 0 && du <1e-5) return 1; /* stop*/
   fprintf(stderr, "%f %d %g\n", t ,i, du );
+  const double dx = 0.01;
+  double outflow_py = 0.0;
+  double inflow_py = 0.0;
+  double outflow_pz = 0.0;
+  double inflow_pz = 0.0;
+  double inflow_area = 0.0;
+  double outflow_area = 0.0;
+  for (double x =-0.5*L0; x<= 0.5*L0; x+=dx) {
+    for (double z =-0.5*L0; z<= 0.5*L0; z+=dx) {
+      double outflow_y = interpolate(u.y, x, 2*L0/3.-dx, z);
+      double inflow_y = interpolate(u.y, x, -L0/3.+dx, z);
+      double outflow_z = interpolate(u.z, x, 2*L0/3.-dx, z);
+      double inflow_z = interpolate(u.z, x, -L0/3.+dx, z);
+      double inflow_water_fraction = interpolate(f, x, -L0/3.0+dx, z);
+      double outflow_water_fraction = interpolate(f, x, 2*L0/3.-dx, z);
+      outflow_py += dx*dx*outflow_y*outflow_water_fraction;
+      inflow_py += dx*dx*inflow_y*inflow_water_fraction;
+      outflow_pz += dx*dx*outflow_z*outflow_water_fraction;
+      inflow_pz += dx*dx*inflow_z*inflow_water_fraction;
+      outflow_area += dx*dx*outflow_water_fraction;
+      inflow_area += dx*dx*inflow_water_fraction;
+      /*if (inflow_water_fraction || outflow_water_fraction)
+        fprintf(stderr, "(%g,%g) inflow_y is %g, inflow_fraction %g, outflow_fraction %g\n",
+                x,z, inflow_y, inflow_water_fraction, outflow_water_fraction);*/
+    }
+  }
+  printf("outflow_py = %g, inflow_py = %g\n", outflow_py, inflow_py);
+  printf("outflow_pz = %g, inflow_pz = %g\n", outflow_py, inflow_py);
+  printf("outflow_area = %g, inflow_area = %g\n", outflow_area, inflow_area);
 }
 event profiles ( t= end)
 {
     FILE *fp = fopen("uxProf", "w");
-    for (double y =-0.5; y<= 0.5; y+=0.01)
+    for (double y =-0.5*L0; y<= 0.5*L0; y+=0.01)
       fprintf(fp,"%f %g\n", y, interpolate(u.x, 0, y, 0) );
     fprintf(fp,"\n");
     fclose (fp);
