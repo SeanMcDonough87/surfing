@@ -275,6 +275,7 @@ event image (t = 0)
   boundary ({Z});
   draw_vof ("f", color = "Z", min = -1.0, max = 1.0, linear = true);
   save ("picture.ppm");
+  printf("Image created")
 }
 
 event snapshot (i += 100)
@@ -286,11 +287,7 @@ event snapshot (i += 100)
   dump (file = name);
 }
 // Hoping the section below will export useable data from NS solver.
-scalar un[];
 event logfile (t+= 0.01) {
-  double du = change (u.x, un);
-  if ( i > 0 && du <1e-5) return 1; /* stop*/
-  fprintf(stderr, "%f %d %g\n", t ,i, du );
   const double dx = 0.01;
   double outflow_py = 0.0;
   double inflow_py = 0.0;
