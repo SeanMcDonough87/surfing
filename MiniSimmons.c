@@ -278,7 +278,7 @@ event image (t = 0)
   printf("Image created");
 }
 
-event snapshot (i += 100) 
+event snapshot (i += 100)
 {
   char name[80];
   sprintf (name, "dump-%d", i);
@@ -297,7 +297,7 @@ event logfile (t+= 0.01) {
   double outflow_area = 0.0;
   for (double x =-0.5*L0; x<= 0.5*L0; x+=dx) {
     for (double z =-0.5*L0; z<= 0.5*L0; z+=dx) {
-      double outflow_y = interpolate(u.y, x, 2*L0/3.-dx, z);
+      double outflow_y = interpolate(u.y, x, 2*L0/3.-dx, z);//change outflow to plus
       double inflow_y = interpolate(u.y, x, -L0/3.+dx, z);
       double outflow_z = interpolate(u.z, x, 2*L0/3.-dx, z);
       double inflow_z = interpolate(u.z, x, -L0/3.+dx, z);
