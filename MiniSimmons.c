@@ -278,14 +278,14 @@ event image (t = 0)
   printf("Image created");
 }
 
-//event snapshot (i += 100) /*Dozens of Dump Files created, seems to be something that is only needed for running in parrallel.
-//{
-  //char name[80];
-  //sprintf (name, "dump-%d", i);
-  //scalar l2[];
-  //lambda2 (u, l2);
-//  dump (file = name);
-//}
+event snapshot (i += 100) 
+{
+  char name[80];
+  sprintf (name, "dump-%d", i);
+  scalar l2[];
+  lambda2 (u, l2);
+  dump (file = name);
+}
 // Hoping the section below will export useable data from NS solver.
 event logfile (t+= 0.01) {
   const double dx = 0.01;
