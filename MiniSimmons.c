@@ -286,46 +286,62 @@ event snapshot (i += 100)
   lambda2 (u, l2);
   dump (file = name);
 }
+event logfile (i++) {
+  if (i == 0){
+    fprintf (ferr,
+             "t dt mgp.i mgpf.i mgu.i grid->tn perf.t perf.speed\n");
+  }
+  fprintf (ferr, "i= %d \t t=%g \t dt=%.4e \t max(u)=%.4e max(v)=%.4e  mg:[ %d %d %d ] \t tn=%ld \t pt=%g \t ps=%g\n",
+           i, t, dt, statsf(u.x).max, statsf(u.y).max, mgp.i, mgpf.i, mgu.i, grid->tn, perf.t, perf.speed);
+  fflush (ferr);
+}
+
+
+
+
+
+
+
 // Hoping the section below will export useable data from NS solver.
-event logfile (t+= 0.01) {
-  const double dx = 0.01;
-  double outflow_py = 0.0;
-  double inflow_py = 0.0;
-  double outflow_pz = 0.0;
-  double inflow_pz = 0.0;
-  double inflow_area = 0.0;
-  double outflow_area = 0.0;
-  for (double x =-0.5*L0; x<= 0.5*L0; x+=dx) {
-    for (double z =-0.5*L0; z<= 0.5*L0; z+=dx) {
-      double outflow_y = interpolate(u.y, x, 2*L0/3.-dx, z);//change outflow to plus
-      double inflow_y = interpolate(u.y, x, -L0/3.+dx, z);
-      double outflow_z = interpolate(u.z, x, 2*L0/3.-dx, z);
-      double inflow_z = interpolate(u.z, x, -L0/3.+dx, z);
-      double inflow_water_fraction = interpolate(f, x, -L0/3.0+dx, z);
-      double outflow_water_fraction = interpolate(f, x, 2*L0/3.-dx, z);
-      outflow_py += dx*dx*outflow_y*outflow_water_fraction;
-      inflow_py += dx*dx*inflow_y*inflow_water_fraction;
-      outflow_pz += dx*dx*outflow_z*outflow_water_fraction;
-      inflow_pz += dx*dx*inflow_z*inflow_water_fraction;
-      outflow_area += dx*dx*outflow_water_fraction;
-      inflow_area += dx*dx*inflow_water_fraction;
+//event logfile (t+= 0.01) {
+  //const double dx = 0.01;
+  //double outflow_py = 0.0;
+  //double inflow_py = 0.0;
+  //double outflow_pz = 0.0;
+  //double inflow_pz = 0.0;
+  //double inflow_area = 0.0;
+  //double outflow_area = 0.0;
+  //for (double x =-0.5*L0; x<= 0.5*L0; x+=dx) {
+    //for (double z =-0.5*L0; z<= 0.5*L0; z+=dx) {
+      //double outflow_y = interpolate(u.y, x, 2*L0/3.-dx, z);//change outflow to plus
+      //double inflow_y = interpolate(u.y, x, -L0/3.+dx, z);
+      //double outflow_z = interpolate(u.z, x, 2*L0/3.-dx, z);
+      //double inflow_z = interpolate(u.z, x, -L0/3.+dx, z);
+      //double inflow_water_fraction = interpolate(f, x, -L0/3.0+dx, z);
+      //double outflow_water_fraction = interpolate(f, x, 2*L0/3.-dx, z);
+      //outflow_py += dx*dx*outflow_y*outflow_water_fraction;
+      //inflow_py += dx*dx*inflow_y*inflow_water_fraction;
+      //outflow_pz += dx*dx*outflow_z*outflow_water_fraction;
+      //inflow_pz += dx*dx*inflow_z*inflow_water_fraction;
+      //outflow_area += dx*dx*outflow_water_fraction;
+      //inflow_area += dx*dx*inflow_water_fraction;
       /*if (inflow_water_fraction || outflow_water_fraction)
         fprintf(stderr, "(%g,%g) inflow_y is %g, inflow_fraction %g, outflow_fraction %g\n",
                 x,z, inflow_y, inflow_water_fraction, outflow_water_fraction);*/
-    }
-  }
-  printf("outflow_py = %g, inflow_py = %g\n", outflow_py, inflow_py);
-  printf("outflow_pz = %g, inflow_pz = %g\n", outflow_py, inflow_py);
-  printf("outflow_area = %g, inflow_area = %g\n", outflow_area, inflow_area);
-}
-event profiles ( t= end)
-{
-    FILE *fp = fopen("uxProf", "w");
-    for (double y =-0.5*L0; y<= 0.5*L0; y+=0.01)
-      fprintf(fp,"%f %g\n", y, interpolate(u.x, 0, y, 0) );
-    fprintf(fp,"\n");
-    fclose (fp);
-}
+    //}
+  //}
+  //printf("outflow_py = %g, inflow_py = %g\n", outflow_py, inflow_py);
+  //printf("outflow_pz = %g, inflow_pz = %g\n", outflow_py, inflow_py);
+  //printf("outflow_area = %g, inflow_area = %g\n", outflow_area, inflow_area);
+//}
+//event profiles ( t= end)
+//{
+    //FILE *fp = fopen("uxProf", "w");
+    //for (double y =-0.5*L0; y<= 0.5*L0; y+=0.01)
+      //fprintf(fp,"%f %g\n", y, interpolate(u.x, 0, y, 0) );
+    //fprintf(fp,"\n");
+    //fclose (fp);
+//}
 
 /**
 ## Mesh adaptation
