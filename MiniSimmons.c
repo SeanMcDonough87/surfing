@@ -144,7 +144,7 @@ int main (int argc, char * argv[])
 The inflow condition fixes the velocity (unity) and the water level
 (using `f0`). */
 
-u.n[bottom] = dirichlet(1);
+u.n[bottom] = dirichlet(0);
 p[bottom]   = neumann(0.);
 pf[bottom]  = neumann(0.);
 f[bottom]   = f0[];
@@ -303,7 +303,7 @@ event logfile (i++) {
 
 
 // Hoping the section below will export useable data from NS solver.
-event logfile (t+= 0.01) {
+//event logfile (t+= 0.01) {
   // const double dx = 0.01;
   // double outflow_py = 0.0;
   // double inflow_py = 0.0;
@@ -333,7 +333,7 @@ event logfile (t+= 0.01) {
   // printf("outflow_py = %g, inflow_py = %g\n", outflow_py, inflow_py);
   // printf("outflow_pz = %g, inflow_pz = %g\n", outflow_py, inflow_py);
   // printf("outflow_area = %g, inflow_area = %g\n", outflow_area, inflow_area);
-}
+//}
 //event profiles ( t= end)
 //{
     //FILE *fp = fopen("uxProf", "w");
