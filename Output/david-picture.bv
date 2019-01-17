@@ -1,0 +1,4 @@
+view (fov = 35.7802, quat = {0.555514,-0.52825,-0.451034,0.457077}, tx = -0.00398377, ty = 0.0328165, bg = {0.3,0.4,0.6}, width = 960, height = 1010, samples = 1);
+box();
+draw_vof("tangaroa");
+draw_vof("f");

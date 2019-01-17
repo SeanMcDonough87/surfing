@@ -1,0 +1,4 @@
+box();
+draw_vof ("f", edges= true);
+cells();
+squares ("f", min = 0,max = 0);
