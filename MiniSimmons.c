@@ -144,7 +144,7 @@ int main (int argc, char * argv[])
 The inflow condition fixes the velocity (unity) and the water level
 (using `f0`). */
 
-u.n[bottom] = dirichlet(0);
+u.n[bottom] = dirichlet(1);
 p[bottom]   = neumann(0.);
 pf[bottom]  = neumann(0.);
 f[bottom]   = f0[];
