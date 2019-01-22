@@ -120,7 +120,7 @@ int main (int argc, char * argv[])
   larger. We change the origin so that the ship is not too close to
   the inflow. */
 
-  size (5.);
+  size (15.);
   origin (-L0/2.,-L0/3.,-L0/2);
 
   /**
@@ -191,7 +191,7 @@ event init (t = 0) {
 
     foreach() {
       f[] = f0[];
-      u.y[] = -1.;
+      u.y[] = 1.;
     }
     boundary ({f,u.y});
   }
@@ -231,7 +231,7 @@ the top of the steep primary Kelvin waves is particularly noticeable.
 The computations above were done on the Irene supercomputer using 12
 levels of refinement. */
 //
-event movie (t += 0.01; t <= 5)
+event movie (t += 0.01; t <= 10)
 {
   view (fov = 5.86528,
 	quat = {0.515965,0.140691,0.245247,0.808605},
