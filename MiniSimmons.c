@@ -162,6 +162,14 @@ Boundary conditions for the solid and fraction tracers. */
 tangaroa[back] = 0;
 f[back] = 1;
 
+/** DJR: The following implements an impermeable boundary condition on the
+    "downward" side of the box (relative to gravity), which is called back
+    unintuitively.  We set the normal velocity to zero, and we think that
+    setting the pressure to neumann boundary conditions is correct. */
+u.n[back] = dirichlet(0);
+p[back]   = neumann(0.);
+pf[back]  = neumann(0.);
+
 /**
 Not sure whether this is really useful. */
 
@@ -292,7 +300,7 @@ event logfile (i++) {
              "t dt mgp.i mgpf.i mgu.i grid->tn perf.t perf.speed\n");
   }
   //fprintf(stdout, "i= %d \t t=%g \t dt=%.4e \t max(u)=%.4e max(v)=%.4e  mg:[ %d %d %d ] \t tn=%ld \t pt=%g \t ps=%g\n",
-           i, t, dt, statsf(u.x).max, statsf(u.y).max, mgp.i, mgpf.i, mgu.i, grid->tn, perf.t, perf.speed);
+  //         i, t, dt, statsf(u.x).max, statsf(u.y).max, mgp.i, mgpf.i, mgu.i, grid->tn, perf.t, perf.speed);
   //fflush(stdout);
 }
 
@@ -333,6 +341,14 @@ event logfile (i++) {
   printf("outflow_py = %g, inflow_py = %g\n", outflow_py, inflow_py);
   printf("outflow_pz = %g, inflow_pz = %g\n", outflow_pz, inflow_pz);   //attempting to get column files for graph
   printf("outflow_area = %g, inflow_area = %g\n", outflow_area, inflow_area);
+  double seafloor_force = 0;
+   for (double x =-0.5*L0; x<= 0.5*L0; x+=dx) {
+     for (double y =-L0/3.; y<= 2*L0/3.; y+=dx) {
+       double pressure = interpolate(p, x, y, -L0/2+dx);//change outflow to plus
+       seafloor_force += dx*dx*pressure;
+     }
+   }
+   printf("seafloor_force = %g\n", seafloor_force);
 }
 //event profiles ( t= end)
 //{
