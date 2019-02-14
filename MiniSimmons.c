@@ -178,10 +178,10 @@ and velocity field. */
 
 event init (t = 0) {
   if (!restore (file = "restart")) {
-    printf("reading stl file %s\n", filename);
+    //printf("reading stl file %s\n", filename);
     FILE * fp = fopen (filename, "r");
     if (!fp) {
-      fprintf(stderr, "Unable to open stl file!\n");
+      fprintf(stderr, "Unable to open stl file! '%s'\n", filename);
       exit(2);
     }
     fraction_from_stl (tangaroa, fp, 5e-4, LEVEL);
@@ -237,7 +237,7 @@ event movie (t += 0.01; t <= 10)
 	quat = {0.515965,0.140691,0.245247,0.808605},
 	tx = -0.07438, ty = -0.0612925,
 	width = 1024, height = 768);
-  printf("I am starting movie generation...\n");
+  //printf("I am starting movie generation...\n");
 
   clear();
   draw_vof ("tangaroa");
@@ -248,7 +248,7 @@ event movie (t += 0.01; t <= 10)
   boundary ({Z});
   draw_vof ("f", color = "Z", min = -1.0, max = 1.0, linear = true);
   save ("movie.mp4");
-  printf("I saved movie.mp4...\n");
+  //printf("I saved movie.mp4...\n");
 
   draw_vof ("tangaroa", fc = {0.5,0.5,0.5});
   draw_vof ("f", color = "Z", min = -0.1, max = 0.1, linear = true);
@@ -256,7 +256,7 @@ event movie (t += 0.01; t <= 10)
   lambda2 (u, l2);
   isosurface ("l2", -100);
   save ("l2.mp4");
-  printf("I saved l2.mp4...\n");
+  //printf("I saved l2.mp4...\n");
 }
 
 event image (t = 0)
@@ -275,7 +275,7 @@ event image (t = 0)
   boundary ({Z});
   draw_vof ("f", color = "Z", min = -1.0, max = 1.0, linear = true);
   save ("picture.ppm");
-  printf("Image created");
+//  ("Image created");
 }
 
 event snapshot (i += 100)
@@ -291,9 +291,9 @@ event logfile (i++) {
     fprintf(stdout,
              "t dt mgp.i mgpf.i mgu.i grid->tn perf.t perf.speed\n");
   }
-  fprintf(stdout, "i= %d \t t=%g \t dt=%.4e \t max(u)=%.4e max(v)=%.4e  mg:[ %d %d %d ] \t tn=%ld \t pt=%g \t ps=%g\n",
+  //fprintf(stdout, "i= %d \t t=%g \t dt=%.4e \t max(u)=%.4e max(v)=%.4e  mg:[ %d %d %d ] \t tn=%ld \t pt=%g \t ps=%g\n",
            i, t, dt, statsf(u.x).max, statsf(u.y).max, mgp.i, mgpf.i, mgu.i, grid->tn, perf.t, perf.speed);
-  fflush(stdout);
+  //fflush(stdout);
 }
 
 
@@ -330,9 +330,9 @@ event logfile (i++) {
            //      x,z, inflow_y, inflow_water_fraction, outflow_water_fraction);*/
      }
    }
-   printf("\noutflow_py = %g, inflow_py = %g\n", outflow_py, inflow_py);
-   printf("outflow_pz = %g, inflow_pz = %g\n", outflow_pz, inflow_pz);
-   printf("outflow_area = %g, inflow_area = %g\n", outflow_area, inflow_area);
+  printf("outflow_py = %g, inflow_py = %g\n", outflow_py, inflow_py);
+  printf("outflow_pz = %g, inflow_pz = %g\n", outflow_pz, inflow_pz);   //attempting to get column files for graph
+  printf("outflow_area = %g, inflow_area = %g\n", outflow_area, inflow_area);
 }
 //event profiles ( t= end)
 //{
